@@ -1,0 +1,20 @@
+{
+  "name": "wolffbot-web-flasher",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static browser flasher for WolffBot firmware (ESP32-S3) using Web Serial + esptool-js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "esptool-js": "0.6.1",
+    "js-md5": "0.9.2"
+  },
+  "devDependencies": {
+    "vite": "^8.2.2"
+  }
+}

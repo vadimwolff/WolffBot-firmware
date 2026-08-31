@@ -1,0 +1,19 @@
+# Arduino / arduino-cli build output (tools/build.sh writes here)
+/build/
+*.elf
+*.map
+
+# Web flasher
+web-flasher/node_modules/
+web-flasher/dist/
+web-flasher/.vite/
+
+# The staged firmware binaries in web-flasher/public/firmware/ ARE committed on
+# purpose: the web flasher is a static site and needs them at run time.
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

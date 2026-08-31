@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WolffBot — ESP32-S3 Firmware Installer</title>
+    <meta
+      name="description"
+      content="Установщик прошивки WolffBot для ESP32-S3 прямо из браузера. WolffBot — форк DASAI Mochi by upiir."
+    />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%BA%3C/text%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div class="hero__logo" aria-hidden="true">🐺</div>
+        <h1 class="hero__title">WolffBot</h1>
+        <p class="hero__subtitle">ESP32-S3 Firmware Installer</p>
+      </header>
+
+      <!-- Browser is unsupported: Web Serial missing -->
+      <section id="unsupported" class="card card--warn" hidden>
+        <h2 class="card__title">Браузер не поддерживается</h2>
+        <p>Для прошивки используйте <strong>Chrome</strong> или <strong>Edge</strong> на компьютере.</p>
+        <p class="muted">
+          Web Serial API не работает в Safari, Firefox, а также в браузерах на Android и iOS.
+          Прошивка с телефона или планшета невозможна.
+        </p>
+      </section>
+
+      <!-- Main flow -->
+      <section id="app" class="stack" hidden>
+        <div class="card">
+          <div class="kv">
+            <div class="kv__row">
+              <span class="kv__k">Устройство</span>
+              <span class="kv__v" id="v-device">—</span>
+            </div>
+            <div class="kv__row">
+              <span class="kv__k">Serial</span>
+              <span class="kv__v" id="v-serial">—</span>
+            </div>
+            <div class="kv__row">
+              <span class="kv__k">Flash</span>
+              <span class="kv__v" id="v-flash">—</span>
+            </div>
+            <div class="kv__row">
+              <span class="kv__k">MAC</span>
+              <span class="kv__v" id="v-mac">—</span>
+            </div>
+            <div class="kv__row">
+              <span class="kv__k">Firmware</span>
+              <span class="kv__v" id="v-firmware">WolffBot</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="btn-connect" class="btn btn--primary" type="button">Подключить устройство</button>
+            <button id="btn-flash" class="btn btn--go" type="button" hidden>ПРОШИТЬ</button>
+            <button id="btn-disconnect" class="btn btn--ghost" type="button" hidden>Отключить</button>
+          </div>
+
+          <p class="status">
+            Статус:
+            <span id="v-status" class="status__value">Не подключено</span>
+          </p>
+
+          <div id="progress-wrap" class="progress" hidden>
+            <div class="progress__bar"><div id="progress-fill" class="progress__fill"></div></div>
+            <div class="progress__meta">
+              <span id="progress-step">Подготовка…</span>
+              <span id="progress-pct">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chip mismatch confirmation -->
+        <div id="chip-warning" class="card card--warn" hidden>
+          <h2 class="card__title">Это не ESP32-S3</h2>
+          <p id="chip-warning-text"></p>
+          <p>
+            Прошивка WolffBot собрана для <strong>ESP32-S3</strong> и не будет работать на другом чипе.
+            Записывать её на этот чип не рекомендуется.
+          </p>
+          <label class="check">
+            <input type="checkbox" id="chk-force" />
+            Я понимаю риск и всё равно хочу прошить это устройство
+          </label>
+        </div>
+
+        <!-- Error panel -->
+        <div id="error" class="card card--error" hidden>
+          <h2 class="card__title">Ошибка</h2>
+          <p id="error-text"></p>
+          <p id="error-hint" class="muted"></p>
+        </div>
+
+        <!-- Success panel -->
+        <div id="success" class="card card--ok" hidden>
+          <h2 class="card__title">✓ WolffBot успешно установлен!</h2>
+          <p>Теперь можно отключить USB.</p>
+        </div>
+
+        <details class="card card--sub">
+          <summary>Настройки прошивки</summary>
+          <div class="settings">
+            <label class="field">
+              <span>Скорость порта</span>
+              <select id="sel-baud">
+                <option value="921600" selected>921600 (быстро)</option>
+                <option value="460800">460800</option>
+                <option value="230400">230400</option>
+                <option value="115200">115200 (надёжно)</option>
+              </select>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="chk-erase" />
+              Полностью стереть flash перед записью
+            </label>
+            <p class="muted">
+              По умолчанию стираются и перезаписываются только те области, куда пишется прошивка —
+              так же, как это делает Arduino IDE. Полное стирание удалит все пользовательские данные
+              и настройки Wi-Fi в NVS.
+            </p>
+          </div>
+        </details>
+
+        <details class="card card--sub">
+          <summary>Журнал</summary>
+          <pre id="log" class="log"></pre>
+        </details>
+
+        <details class="card card--sub">
+          <summary>Что именно записывается</summary>
+          <table class="parts" id="parts-table">
+            <thead>
+              <tr><th>Смещение</th><th>Файл</th><th>Размер</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p class="muted" id="parts-note"></p>
+        </details>
+      </section>
+
+      <footer class="footer">
+        <p>
+          <strong>WolffBot</strong> — модифицированный форк
+          <a href="https://github.com/upiir/esp32s3_oled_dasai_mochi" target="_blank" rel="noopener">DASAI Mochi</a>
+          от <a href="https://www.youtube.com/upir_upir" target="_blank" rel="noopener">upiir</a>.
+          Original work © 2025 upir, MIT License.
+        </p>
+        <p class="muted">
+          Прошивка собрана заранее и записывается без изменений. Сайт полностью статический —
+          ничего не отправляется на сервер.
+        </p>
+      </footer>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
