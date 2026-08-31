@@ -1,0 +1,57 @@
+WolffBot
+========
+
+WolffBot is a modified fork of DASAI Mochi by upiir.
+
+Original project
+----------------
+  Name:       DASAI Mochi (esp32s3_oled_dasai_mochi)
+  Author:     upiir  <https://www.youtube.com/upir_upir>
+  Repository: https://github.com/upiir/esp32s3_oled_dasai_mochi
+  Commit:     71ecb80e27af6f94aa453fe98e25a8bb557a7f18 (2025-03-25)
+  Licence:    MIT License, Copyright (c) 2025 upir
+
+The firmware in firmware/WolffBot/WolffBot.ino is upir's work. The only change
+made to it is an added comment header identifying the fork and its attribution;
+no line of the original was removed or altered. A verbatim copy of the upstream
+repository, including its own LICENSE and README, is kept in
+original/esp32s3_oled_dasai_mochi/.
+
+The LICENSE file at the root of this repository is the unmodified upstream MIT
+License and must be distributed with the software. Modifications made for
+WolffBot are released under the same MIT License.
+
+
+Third-party components used by this project
+-------------------------------------------
+
+U8g2
+  Author:     olikraus (Oliver Kraus)
+  Repository: https://github.com/olikraus/u8g2
+  Licence:    2-clause BSD
+  Used by:    the firmware, as the SSD1306 display driver.
+
+Arduino core for the ESP32
+  Author:     Espressif Systems
+  Repository: https://github.com/espressif/arduino-esp32
+  Licence:    LGPL-2.1 (core), Apache-2.0 (ESP-IDF components)
+  Used by:    the firmware toolchain; also the source of the bootloader,
+              partition table and boot_app0 images shipped in
+              web-flasher/public/firmware/.
+
+esptool-js
+  Author:     Espressif Systems
+  Repository: https://github.com/espressif/esptool-js
+  Licence:    Apache-2.0
+  Used by:    the web flasher, to talk to the ESP32-S3 bootloader.
+
+js-md5
+  Author:     Chen, Yi-Cyuan
+  Repository: https://github.com/emn178/js-md5
+  Licence:    MIT
+  Used by:    the web flasher, to verify written images.
+
+Vite
+  Repository: https://github.com/vitejs/vite
+  Licence:    MIT
+  Used by:    the web flasher build only; not shipped at run time.

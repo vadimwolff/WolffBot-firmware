@@ -1,0 +1,68 @@
+{
+  "name": "WolffBot",
+  "version": "1.0.0",
+  "description": "WolffBot firmware - a modified fork of DASAI Mochi by upiir",
+  "upstream": {
+    "project": "https://github.com/upiir/esp32s3_oled_dasai_mochi",
+    "commit": "71ecb80e27af6f94aa453fe98e25a8bb557a7f18",
+    "license": "MIT (c) 2025 upir"
+  },
+  "chip": "ESP32-S3",
+  "board": "Seeed Studio XIAO ESP32S3 (esp32:esp32:XIAO_ESP32S3)",
+  "flash": {
+    "size": "8MB",
+    "mode": "dio",
+    "freq": "80m",
+    "partitionScheme": "default_8MB"
+  },
+  "toolchain": {
+    "arduinoCli": "1.3.1",
+    "core": "esp32:esp32@3.3.9",
+    "libraries": [
+      "U8g2 (olikraus/U8g2_Arduino tag 2.37.1)"
+    ],
+    "esptool": "5.3.0"
+  },
+  "parts": [
+    {
+      "offset": "0x0",
+      "path": "firmware/WolffBot-bootloader.bin",
+      "label": "Bootloader",
+      "size": 19984,
+      "sha256": "3a06e81d78e928687d7acd8abcd069543a4413de4398e2e2940a97b3fc739fd8",
+      "md5": "333a3fa03b13e2a870cde9f35ea29af7"
+    },
+    {
+      "offset": "0x8000",
+      "path": "firmware/WolffBot-partitions.bin",
+      "label": "Partition table",
+      "size": 3072,
+      "sha256": "1d9cca96de0fe07ad7fc0648b9878ddecd9ce565e38b589ad20fea698ed4c80c",
+      "md5": "801ba71678a964614657a6d8fbc6baca"
+    },
+    {
+      "offset": "0xe000",
+      "path": "firmware/boot_app0.bin",
+      "label": "OTA data (boot_app0)",
+      "size": 8192,
+      "sha256": "f94c5d786a7a8fab06ac5d10e33bf37711a6697636dc037559ea19cc410a17f0",
+      "md5": "e6327541e2dc394ca2c3b3280ac0f39f"
+    },
+    {
+      "offset": "0x10000",
+      "path": "firmware/WolffBot-app.bin",
+      "label": "WolffBot application",
+      "size": 408864,
+      "sha256": "c92f5cbe6b657286e8ffeeaf632e523c97bc0ae0528dd6aff6070cae0d7c20bc",
+      "md5": "fb115d41da092199182ffbf85726b5be"
+    }
+  ],
+  "factory": {
+    "offset": "0x0",
+    "path": "firmware/WolffBot-factory.bin",
+    "label": "WolffBot factory image",
+    "size": 474400,
+    "sha256": "ef05372a0581dd30db01e3245b31d3c885548f5306c30516c447a94dfb582cd7",
+    "md5": "39063c7c5ad5cbf4c31d2831e347d699"
+  }
+}
